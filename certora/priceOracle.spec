@@ -582,6 +582,33 @@ rule verify_getCurrentPrice() {
 
 //---------------------------------Spacing Rules-------------------------------
 
+definition isEpochBoundary(uint256 t) returns bool =
+    t == get8amWeeklyOrDailyAligned(t);
+
+invariant price_spacing(address u, address c, uint256 t)
+    _price(u,c,t) != 0 => isEpochBoundary(t)
+
+ghost minimum_time(address, address) returns uint256 {
+    axiom forall address u. forall address c. forall uint256 t. t < minimum_time(u,c) => _price(u,c,t) == 0;
+    axiom forall address u. forall address c. _price(u,c,minimum_time(u,c)) != 0;
+    axiom forall address u. forall address c. isEpochBoundary(minimum_time(u, c));
+}
+
+ghost maximum_time(address, address) returns uint256 {
+    axiom forall address u. forall address c. forall uint256 t. t > maximum_time(u,c) => _price(u,c,t) == 0;
+    axiom forall address u. forall address c. _price(u,c,maximum_time(u,c)) != 0;
+    axiom forall address u. forall address c. isEpochBoundary(maximum_time(u, c));
+}
+
+invariant price_convex(address u, address c, uint256 t)
+    minimum_time(u,c) < t && t < maximum_time(u,c) && isEpochBoundary(t) => _price(u,c,t) != 0
+    { preserved {
+        requireInitializationInvariants();
+        requireInvariant price_domain(u,c,t);
+        requireInvariant price_domain(u,c,minimum_time(u,c));
+        requireInvariant price_domain(u,c,maximum_time(u,c));
+    } }
+
 // Make sure that the elements in the mapping are evenly spaced.
 // It proves by iduction - take any 2 arbitrary consequtive aligned dates and checks that there is no elemet between them (price = 0)
 rule price_space(address u, address c, uint256 t1, uint256 t2, uint256 t, method f){

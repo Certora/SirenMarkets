@@ -15,4 +15,6 @@ certoraRun certora/harness/PriceOracleHarness.sol \
   --settings -t=60,-postProcessCounterExamples=true,-enableStorageAnalysis=true \
   --loop_iter 1 --optimistic_loop \
   --packages @openzeppelin=node_modules/@openzeppelin @chainlink=node_modules/@chainlink \
-  --msg "PriceOracle $1" --staging
+  --rule price_convex \
+  --msg "PriceOracle $1" --staging \
+ 
