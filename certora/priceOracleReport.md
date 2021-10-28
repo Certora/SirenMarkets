@@ -119,4 +119,5 @@ The changes to the state variables described above can only happen as follows:
    7.2 (![passing]) `[price_accurate]`: it was changed to match result of a call to oracle(u,c).latestData
    7.3 (![passing]) `[price_bounded_past]`: t is in the past
    7.4 (![passing]) `[price_t0_constant]`: there are no t' > t with nonzero price(u,c,t')
-   7.5 (![passing]) `[price_authorized_only]`: it was changed by either setSettlementPrice, setSettlementPriceForDate, or addTokenPair
+   7.5 (![passing]) `[genesis_price_is_fixed]`: prices cannot be updated before the first price recorded for a token pair \_price(u,c,t0)
+   7.6 (![passing]) `[price_authorized_only]`: it was changed by either setSettlementPrice, setSettlementPriceForDate, or addTokenPair

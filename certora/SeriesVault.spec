@@ -59,7 +59,7 @@ invariant initialization_controller()
     requireInvariant noninitializing();
   }}
 
-// @MM - Shouldn't we make 2 separte invariants for the 2 of them?
+// @MM - V
 // if an allowance is defined / token is approved for a given spender it must be the controller
 invariant controller_spender_only(address owner, address spender)
    ERC20.allowance(owner, spender) != 0 || ERC1155.isApprovedForAll(owner, spender) => spender == controller()
